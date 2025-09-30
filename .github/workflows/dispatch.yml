@@ -1,0 +1,21 @@
+name: Dispatch Issue to AI Repo
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger private repo
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT_TOKEN }} # classic PAT with access to private repo
+          repository: MBilalShafi/ai-analyzer-action-runner
+          event-type: issue_opened
+          client-payload: |
+            {
+              "issue_number": "${{ github.event.issue.number }}",
+              "issue_body": "${{ github.event.issue.body }}"
+            }
